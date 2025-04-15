@@ -5,29 +5,27 @@ import pandaslib as pl
 
 #TODO Write your extraction code here
 
-# Read google sheet csv file 
-survey = pd.read_csv('https://docs.google.com/spreadsheets/d/1IPS5dBSGtwYVbjsfbaMCYIWnOuRmJcbequohNxCyGVw/export?resourcekey=&gid=1625408792&format=csv')
-# extract year from date # todo refactor this to a function
-survey['year'] = survey['Timestamp'].apply(pl.extract_year_mdy)
-# save the survey data to a csv file in the cache
-survey.to_csv('cache/survey.csv', index=False)
+# extract.py
+import pandas as pd
+import os
+from pandaslib import extract_year_mdy
 
-# get each unique year in the survey data
-years = survey['year'].unique()
+# Create cache directory if it doesn't exist
+os.makedirs('cache', exist_ok=True)
 
-# for each year
-for year in years:
-    # get the cost of living data for that year
-    col_year = pd.read_html(f"https://www.numbeo.com/cost-of-living/rankings.jsp?title={year}&displayColumn=0")
-    # this is the correct table
-    col_year = col_year[1]
-    # add the year column
-    col_year['year'] = year
-    # save the data to a csv file in the cache
-    col_year.to_csv(f'cache/col_{year}.csv', index=False)
+# 1. Extract states data
+states_url = "https://docs.google.com/spreadsheets/d/14wvnQygIX1eCVo7H5B7a96W1v5VCg6Q9yeRoESF6epw/export?format=csv"
+states_df = pd.read_csv(states_url)
+states_df.to_csv('cache/states.csv', index=False)
 
+# 2. Extract survey data
+survey_url = "https://docs.google.com/spreadsheets/d/1IPS5dBSGtwYVbjsfbaMCYIWnOuRmJcbequohNxCyGVw/export?format=csv"
+survey_df = pd.read_csv(survey_url)
 
-# Read in states data table
-url = "https://docs.google.com/spreadsheets/d/14wvnQygIX1eCVo7H5B7a96W1v5VCg6Q9yeRoESF6epw/export?format=csv"
-state_table = pd.read_csv(url)
-state_table.to_csv('cache/states.csv', index=False)
+# Add year column
+survey_df['year'] = survey_df['Timestamp'].apply(extract_year_mdy)
+survey_df.to_csv('cache/survey.csv', index=False)
+
+# 3. Extract cost of living data for each year
+# This part would need more implementation based on where the COL data comes from
+# You would need to find a source for historical cost of living data

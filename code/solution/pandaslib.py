@@ -1,35 +1,35 @@
-from datetime import datetime
+# pandaslib.py
+import pandas as pd
 
-def clean_currency(item: str) -> float:
-    '''
-    remove anything from the item that prevents it from being converted to a float
-    '''    
-    return float(str(item).replace('$', '').replace(',', ''))
+def extract_year_mdy(timestamp_str):
+    """Extract year from MM/DD/YYYY timestamp string"""
+    if pd.isna(timestamp_str):
+        return None
+    parts = timestamp_str.split('/')
+    if len(parts) >= 3:
+        return int(parts[2])
+    return None
 
-def extract_year_mdy(timestamp):
-    '''
-    use the datatime.strptime to parse the date and then extract the year
-    '''
-    return datetime.strptime(timestamp, '%m/%d/%Y %H:%M:%S').year
-
-def clean_country_usa(item: str) ->str:
-    '''
-    This function should replace any combination of 'United States of America', USA' etc.
-    with 'United States'
-    '''
-    possibilities = [
-        'united states of america', 'usa', 'us', 'united states', 'u.s.'
-    ]
-    if item.strip().lower() in possibilities:
+def clean_country_usa(country_str):
+    """Standardize US country names to 'United States'"""
+    if pd.isna(country_str):
+        return country_str
+    country = str(country_str).strip().lower()
+    usa_aliases = ['us', 'usa', 'united states', 'united states of america']
+    if country in usa_aliases:
         return 'United States'
-    else:
-        return item
+    return country_str
 
-
-
-if __name__=='__main__':
-    print("""
-        Add code here if you need to test your functions
-        comment out the code below this like before sumbitting
-        to improve your code similarity score.""")
-
+def clean_currency(currency_str):
+    """Clean currency strings into float values"""
+    if pd.isna(currency_str):
+        return None
+    if isinstance(currency_str, (int, float)):
+        return float(currency_str)
+    # Remove $, commas, and any non-numeric characters except .
+    cleaned = ''.join(c for c in str(currency_str) 
+                     if c.isdigit() or c == '.')
+    try:
+        return float(cleaned)
+    except ValueError:
+        return None

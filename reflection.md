@@ -1,7 +1,5 @@
-# Reflection
-
-Student Name:  name
-Sudent Email:  email
+Student Name:  Gianluca Zurlo
+Sudent Email:  Gzurlo@syr.edu
 
 ## Instructions
 
@@ -22,4 +20,4 @@ Examples:
 **Best Reflection** "I learned when to use while vs for loops. While loops are for sentiel-controlled values (waiting for a condition to occur), vs for loops are for iterating over collections of fixed values."
 
 `--- Reflection Below This Line ---`
-
+#This assignment deepened my understanding of building ETL pipelines with pandas, particularly in data cleaning (currency standardization, country names) and merging complex datasets. I struggled most with handling inconsistent city/state formats during the merge operation and would benefit from more practice with pandas' string operations and merge strategies. The pivot table reporting was clearer after this exercise, but I still need to better understand cost-of-living adjustment calculations and their impact on salary comparisons.
